@@ -22,11 +22,11 @@ async def broadcast(_, message):
     t, s, b, d, u = 0, 0, 0, 0, 0
     start_time = time()
     status = '''<b>Broadcast Stats :</b>
-<b>• Total Users:</b> {t}
-<b>• Success:</b> {s}
-<b>• Blocked Users:</b> {b}
-<b>• Deleted Accounts:</b> {d}
-<b>• Unsuccess Attempt:</b> {u}'''
+<b>❅ Total Users:</b> {t}
+<b>❅ Success:</b> {s}
+<b>❅ Blocked Users:</b> {b}
+<b>❅ Deleted Accounts:</b> {d}
+<b>❅ Unsuccess Attempt:</b> {u}'''
     updater = time()
     pls_wait = await sendMessage(message, status.format(**locals()))
     for uid in (await DbManager().get_pm_uids()):

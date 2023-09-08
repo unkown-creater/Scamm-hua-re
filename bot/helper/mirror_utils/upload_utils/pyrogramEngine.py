@@ -131,7 +131,7 @@ class TgUploader:
             try:
                 mention = msg_user.mention(style='HTML')
                 uid = msg_user.id
-                msg = f"<b>Task started</b>\n\n<b>• User:</b> {mention}\n<b>• ID:</b> <code>{uid}</code>"
+                msg = f"<b>Task started</b>\n\n<b>❅ User:</b> {mention}\n<b>❅ ID:</b> <code>{uid}</code>"
                 if self.__listener.source_url:
                     sbtn = ButtonMaker()
                     sbtn.ubutton('Source', self.__listener.source_url)

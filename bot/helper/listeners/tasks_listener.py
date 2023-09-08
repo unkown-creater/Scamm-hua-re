@@ -109,7 +109,7 @@ class MirrorLeechListener:
             if file is not None and file.media is not None:
                 mtype = file.media.value
                 media = getattr(file, mtype)
-                self.source_msg = f'<b>• Name:</b> {media.file_name if hasattr(media, "file_name") else f"{mtype}_{media.file_unique_id}"}\n<b>• Type:</b> {media.mime_type if hasattr(media, "mime_type") else "image/jpeg" if mtype == "photo" else "text/plain"}\n<b>• Size:</b> {get_readable_file_size(media.file_size)}\n<b>• Created Date:</b> {media.date}\n<b>• Media Type:</b> {mtype.capitalize()}'
+                self.source_msg = f'<b>❅ Name:</b> {media.file_name if hasattr(media, "file_name") else f"{mtype}_{media.file_unique_id}"}\n<b>❅ Type:</b> {media.mime_type if hasattr(media, "mime_type") else "image/jpeg" if mtype == "photo" else "text/plain"}\n<b>❅ Size:</b> {get_readable_file_size(media.file_size)}\n<b>❅ Created Date:</b> {media.date}\n<b>❅ Media Type:</b> {mtype.capitalize()}'
             else:
                 self.source_msg = f"<code>{self.message.reply_to_message.text}</code>"
         elif self.source_url.startswith('https://t.me/share/url?url='):
@@ -125,7 +125,7 @@ class MirrorLeechListener:
                     else:
                         name += ('&' if amper else '') + check.replace('dn=', '').replace('+', '')
                         amper = True
-                self.source_msg = f"<b>• Name:</b> {name}\n<b>• Magnet Hash:</b> <code>{hashh}</code>\n<b>• Total Trackers:</b> {tracCount} \n<b>• Share:</b> <a href='https://t.me/share/url?url={quote(msg)}'>Share To Telegram</a>"
+                self.source_msg = f"<b>❅ Name:</b> {name}\n<b>❅ Magnet Hash:</b> <code>{hashh}</code>\n<b>❅ Total Trackers:</b> {tracCount} \n<b>❅ Share:</b> <a href='https://t.me/share/url?url={quote(msg)}'>Share To Telegram</a>"
             else:
                 self.source_msg = f"<code>{msg}</code>"
         else:
@@ -136,9 +136,9 @@ class MirrorLeechListener:
             source = self.source_msg
             msg = f"""<b>Task Started</b>
 
-<b>• Mode:</b> {self.upload_details['mode']}
-<b>• Task by:</b> {self.tag}
-<b>• User ID: </b><code>{self.message.from_user.id}</code>
+<b>❅ Mode:</b> {self.upload_details['mode']}
+<b>❅ Task by:</b> {self.tag}
+<b>❅ User ID: </b><code>{self.message.from_user.id}</code>
 """
             self.linkslogmsg = await sendCustomMsg(config_dict['LEECH_LOG_ID'], msg + source)
         user_dict = user_data.get(self.message.from_user.id, {})
@@ -413,18 +413,18 @@ class MirrorLeechListener:
         name, _ = await format_filename(name, user_id, isMirror=not self.isLeech)
         user_dict = user_data.get(user_id, {})
         msg = f'{escape(name)}\n\n'
-        msg += f'<b>• Size: </b>{get_readable_file_size(size)}\n'
-        msg += f'<b>• Elapsed: </b>{get_readable_time(time() - self.message.date.timestamp())}\n'
-        msg += f'<b>• Mode: </b>{self.upload_details["mode"]}\n'
+        msg += f'<b>❅ Size: </b>{get_readable_file_size(size)}\n'
+        msg += f'<b>❅ Elapsed: </b>{get_readable_time(time() - self.message.date.timestamp())}\n'
+        msg += f'<b>❅ Mode: </b>{self.upload_details["mode"]}\n'
         lmsg = '<b>Files are sent. Access via links</b>'
         LOGGER.info(f'Task Done: {name}')
         buttons = ButtonMaker()
         if self.isLeech:
-            msg += f'<b>• Total files: </b>{folders}\n'
+            msg += f'<b>❅ Total files: </b>{folders}\n'
             if mime_type != 0:
-                msg += f'<b>• Corrupted files: </b>{mime_type}\n'
-            msg += f'<b>• Leeched by: </b>{self.tag}\n'
-            msg += f'<b>• User ID: </b><code>{self.message.from_user.id}</code>\n\n'
+                msg += f'<b>❅ Corrupted files: </b>{mime_type}\n'
+            msg += f'<b>❅ Leeched by: </b>{self.tag}\n'
+            msg += f'<b>❅ User ID: </b><code>{self.message.from_user.id}</code>\n\n'
             if not files:
                 if self.isPrivate:
                     msg += '<b>Files are not sent for unknown reason</b>'
@@ -482,16 +482,16 @@ class MirrorLeechListener:
                 await start_from_queued()
                 return
         else:
-            msg += f'<b>• Type: </b>{mime_type}\n'
+            msg += f'<b>❅ Type: </b>{mime_type}\n'
             if mime_type == "Folder":
-                msg += f'<b>• SubFolders: </b>{folders}\n'
-                msg += f'<b>• Files: </b>{files}\n'
+                msg += f'<b>❅ SubFolders: </b>{folders}\n'
+                msg += f'<b>❅ Files: </b>{files}\n'
             if link or rclonePath and config_dict['RCLONE_SERVE_URL']:
 
                 if link:
                     buttons.ubutton('Cloud link', link)
                 else:
-                    msg += f'<b>• Path: </b><code>{rclonePath}</code>\n'
+                    msg += f'<b>❅ Path: </b><code>{rclonePath}</code>\n'
                 if rclonePath and (RCLONE_SERVE_URL := config_dict['RCLONE_SERVE_URL']):
                     remote, path = rclonePath.split(':', 1)
                     url_path = rutils.quote(f'{path}')
@@ -514,10 +514,10 @@ class MirrorLeechListener:
                 buttons = extra_btns(buttons)
                 button = buttons.build_menu(2)
             else:
-                msg += f'<b>• Path: </b><code>{rclonePath}</code>/n'
+                msg += f'<b>❅ Path: </b><code>{rclonePath}</code>/n'
                 button = None
-            msg += f'<b>• Uploaded by: </b>{self.tag}\n'
-            msg += f'<b>• User ID: </b><code>{self.message.from_user.id}</code>\n\n'
+            msg += f'<b>❅ Uploaded by: </b>{self.tag}\n'
+            msg += f'<b>❅ User ID: </b><code>{self.message.from_user.id}</code>\n\n'
 
             if config_dict['MIRROR_LOG_ID']:
                 buttonss = button

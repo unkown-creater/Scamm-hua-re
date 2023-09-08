@@ -153,7 +153,7 @@ def source(self):
     return (sender_chat.title if (sender_chat := self.message.sender_chat) else self.message.from_user.username or self.message.from_user.id)
 
 def get_readable_message():
-    msg = '<b>Powered by @powerleech</b>\n'
+    msg = '<b>Powered by @powerleech</b>\n\n'
     button = None
     tasks = len(download_dict)
     currentTime = get_readable_time(time() - botStartTime)
@@ -167,10 +167,10 @@ def get_readable_message():
         globals()['PAGE_NO'] = PAGES
     for download in list(download_dict.values())[STATUS_START:STATUS_LIMIT+STATUS_START]:
         msg += f"💾Filename: {escape(f'{download.name()}')}\n"
-        msg += f"<b>{download.status()}...</b>"
+        msg += f"<b>⚡{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
             msg += f"\n{get_progress_bar_string(download.progress())} {download.progress()}"
-            msg += f"\n🔰 Progress: {download.processed_bytes()} of {download.size()}"
+            msg += f"\n\n🔰 Progress: {download.processed_bytes()} of {download.size()}"
             msg += f"\n🔰User: {source(download)}"
             msg += f"\n🔰Speed: {download.speed()}"
             msg += f'\n🔰Estimated: {download.eta()}'

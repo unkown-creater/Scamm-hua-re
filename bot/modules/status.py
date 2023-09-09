@@ -22,7 +22,6 @@ async def mirror_status(_, message):
         msg = f'<b>{quote}</b>\n\n'
         msg += 'No Active Downloads !\n'
         msg += f"\n<b>❅ Bot uptime</b>: {currentTime}"
-        msg += f"\n<b>❅ Free disk space</b>: {free}"
         reply_message = await sendMessage(message, msg)
         await deleteMessage(message)
         await one_minute_del(reply_message)

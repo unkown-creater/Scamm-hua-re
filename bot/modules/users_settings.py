@@ -197,7 +197,6 @@ async def update_user_settings(query, key=None, edit_type=None, edit_mode=None, 
 async def user_settings(client, message):
     msg, button = await get_user_settings(message.from_user)
     x = await sendMessage(message, msg, button)
-        await editMessage(message, msg, button, photo=thumbpath)
     await five_minute_del(message)
     await deleteMessage(x)
 

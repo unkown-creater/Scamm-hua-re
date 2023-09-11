@@ -11,7 +11,6 @@ from functools import partial
 from html import escape
 from io import BytesIO
 from asyncio import sleep
-
 from bot import OWNER_ID, bot, user_data, config_dict, DATABASE_URL, IS_PREMIUM_USER, MAX_SPLIT_SIZE
 from bot.helper.telegram_helper.message_utils import sendMessage, sendCustomMsg, editMessage, deleteMessage, sendFile, chat_info, user_info, five_minute_del
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
@@ -20,7 +19,6 @@ from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.button_build import ButtonMaker
 from bot.helper.ext_utils.db_handler import DbManager
 from bot.helper.ext_utils.bot_utils import update_user_ldata, get_readable_file_size, sync_to_async, new_thread, is_gdrive_link
-
 handler_dict = {}
 desp_dict = {'rcc': ['RClone is a command-line program to sync files and directories to and from different cloud storage providers like GDrive, OneDrive...', 'Send rcl.conf. Timeout: 60 sec'],
             'prefix': ['Filename Prefix is the Front Part attacted with the Filename of the Leech Files.', 'Send Leech Filename Prefix. Timeout: 60 sec'],
@@ -44,7 +42,6 @@ fname_dict = {'rcc': 'RClone',
              'yt_opt': 'YT-DLP Options',
              'split_size': 'Leech Splits',
              }
-
 async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None):
     user_id = from_user.id
     name = from_user.mention(style="html")
@@ -66,14 +63,10 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         ytopt = 'Not Exists' if (val:=user_dict.get('yt_opt', config_dict.get('YT_DLP_OPTIONS', ''))) == '' else val
         buttons.ibutton("Prefix", f"userset {user_id} prefix")
         prefix = user_dict.get('prefix', 'Not Exists')
-
         buttons.ibutton("Suffix", f"userset {user_id} suffix")
         suffix = user_dict.get('suffix', 'Not Exists')
-
         buttons.ibutton("Remname", f"userset {user_id} remname")
         remname = user_dict.get('remname', 'Not Exists')
-
-
         text = f'<b>Universal Settings for {name}</b>\n\n'
         text += f'<b>• YT-DLP Options:</b> <b><code>{ytopt}</code></b>\n'
         text += f'<b>• Prefix:</b> <code>{prefix}</code>\n'
@@ -88,11 +81,9 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         tds_mode = "Enabled" if user_dict.get('td_mode') else "Disabled"
         user_tds = len(val) if (val := user_dict.get('user_tds', False)) else 0
         buttons.ibutton("User TDs", f"userset {user_id} user_tds")
-
         text = f'<b>Mirror Settings for {name}</b>\n\n'
         text += f'<b>• Rclone Config:</b> {rccmsg}\n'
         text += f'<b>• User TD Mode:</b> {tds_mode}'
-
         buttons.ibutton("Back", f"userset {user_id} back", "footer")
         buttons.ibutton("Close", f"userset {user_id} close", "footer")
         button = buttons.build_menu(2)
@@ -103,25 +94,20 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         else:
             ltype = "MEDIA"
             buttons.ibutton("Send As Document", f"userset {user_id} doc")
-
         mediainfo = "Enabled" if user_dict.get('mediainfo', config_dict['SHOW_MEDIAINFO']) else "Disabled"
         buttons.ibutton('Disable MediaInfo' if mediainfo == 'Enabled' else 'Enable MediaInfo', f"userset {user_id} mediainfo")
         if config_dict['SHOW_MEDIAINFO']:
             mediainfo = "Force Enabled"
         buttons.ibutton("Thumbnail", f"userset {user_id} thumb")
         thumbmsg = "Exists" if await aiopath.exists(thumbpath) else "Not Exists"
-
         buttons.ibutton("Leech Splits", f"userset {user_id} split_size")
         split_size = get_readable_file_size(config_dict['LEECH_SPLIT_SIZE']) + ' (Default)' if user_dict.get('split_size', '') == '' else get_readable_file_size(user_dict['split_size'])
         equal_splits = 'Enabled' if user_dict.get('equal_splits', config_dict.get('EQUAL_SPLITS')) else 'Disabled'
         media_group = 'Enabled' if user_dict.get('media_group', config_dict.get('MEDIA_GROUP')) else 'Disabled'
-
         buttons.ibutton("Leech Caption", f"userset {user_id} lcaption")
         lcaption = user_dict.get('lcaption', 'Not Exists')
-
         buttons.ibutton("Leech Dump", f"userset {user_id} ldump")
         ldump = 'Not Exists' if (val:=user_dict.get('ldump', '')) == '' else val
-
         text = f'<b>Leech Settings for {name}</b>\n\n'
         text += f'<b>• Leech Type:</b> {ltype}\n'
         text += f'<b>• Custom Thumbnail:</b> {thumbmsg}\n'
@@ -131,7 +117,6 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         text += f'<b>• Leech Caption:</b> <code>{escape(lcaption)}</code>\n'
         text += f'<b>• Leech Dump:</b> <code>{ldump}</code>\n'
         text += f'<b>• MediaInfo Mode:</b> <code>{mediainfo}</code>'
-
         buttons.ibutton("Back", f"userset {user_id} back", "footer")
         buttons.ibutton("Close", f"userset {user_id} close", "footer")
         button = buttons.build_menu(2)
@@ -183,8 +168,6 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         buttons.ibutton("Close", f"userset {user_id} close", "footer")
         button = buttons.build_menu(2)
     return text, button
-
-
 async def update_user_settings(query, key=None, edit_type=None, edit_mode=None, msg=None, sdirect=False):
     msg, button = await get_user_settings(msg.from_user if sdirect else query.from_user, key, edit_type, edit_mode)
     user_id = query.from_user.id
@@ -192,14 +175,12 @@ async def update_user_settings(query, key=None, edit_type=None, edit_mode=None, 
     if not ospath.exists(thumbpath):
         thumbpath = 'IMAGES'
     await editMessage(query if sdirect else query.message, msg, button, photo=thumbpath)
-
 @new_thread
 async def user_settings(client, message):
     msg, button = await get_user_settings(message.from_user)
     x = await sendMessage(message, msg, button, photo='IMAGES')
     await five_minute_del(message)
     await deleteMessage(x)
-
 async def set_yt_options(client, message, pre_event):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -209,8 +190,6 @@ async def set_yt_options(client, message, pre_event):
     await update_user_settings(pre_event, 'yt_opt', 'universal')
     if DATABASE_URL:
         await DbManager().update_user_data(user_id)
-
-
 async def set_custom(client, message, pre_event, key, direct=False):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -240,8 +219,6 @@ async def set_custom(client, message, pre_event, key, direct=False):
     await update_user_settings(pre_event, key, return_key, msg=message, sdirect=direct)
     if DATABASE_URL:
         await DbManager().update_user_data(user_id)
-
-
 async def set_thumb(client, message, pre_event, key, direct=False):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -257,8 +234,6 @@ async def set_thumb(client, message, pre_event, key, direct=False):
     await update_user_settings(pre_event, key, 'leech', msg=message, sdirect=direct)
     if DATABASE_URL:
         await DbManager().update_user_doc(user_id, 'thumb', des_dir)
-
-
 async def add_rclone(client, message, pre_event):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -272,8 +247,6 @@ async def add_rclone(client, message, pre_event):
     await update_user_settings(pre_event, 'rcc', 'mirror')
     if DATABASE_URL:
         await DbManager().update_user_doc(user_id, 'rclone', des_dir)
-
-
 async def leech_split_size(client, message, pre_event):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -288,13 +261,10 @@ async def leech_split_size(client, message, pre_event):
     await update_user_settings(pre_event, 'split_size', 'leech')
     if DATABASE_URL:
         await DbManager().update_user_data(user_id)
-
-
 async def event_handler(client, query, pfunc, rfunc, photo=False, document=False):
     user_id = query.from_user.id
     handler_dict[user_id] = True
     start_time = time()
-
     async def event_filter(_, __, event):
         if photo:
             mtype = event.photo
@@ -312,8 +282,6 @@ async def event_handler(client, query, pfunc, rfunc, photo=False, document=False
             handler_dict[user_id] = False
             await rfunc()
     client.remove_handler(*handler)
-
-
 @new_thread
 async def edit_user_settings(client, query):
     from_user = query.from_user
@@ -554,7 +522,6 @@ async def edit_user_settings(client, query):
         await query.answer()
         await message.reply_to_message.delete()
         await message.delete()
-
 async def getUserInfo(client, id):
     try:
         return (await client.get_users(id)).mention(style="html")
@@ -605,9 +572,6 @@ async def send_users_settings(client, message):
         await sendMessage(message, msg, button)
     else:
         await sendMessage(message, f'{userid} have not saved anything..')
-
-
-
 async def user_settings(client, message):
     if len(message.command) > 1 and message.command[1] == '-s':
         set_arg = message.command[2].strip() if len(message.command) > 2 else None
@@ -619,23 +583,23 @@ async def user_settings(client, message):
                 return await set_custom(client, reply_to, msg, set_arg, True)
             elif set_arg == 'thumb' and reply_to.media:
                 return await set_thumb(client, reply_to, msg, set_arg, True)
-        await editMessage(msg, '🌐 <b><u>Available Flags :</u></b>>> Reply to the Value with appropriate arg respectively to set directly without opening UserSet.'
-msg += '\n\n 💠 <b>Custom Thumbnail </b>'
-msg += f'\n<b> /us{CMD_SUFFIX} -s thumb </b>'
-msg += '\n\n 💠 <b>Leech Filename Prefix </b>'
-msg += f'\n<b> /us{CMD_SUFFIX} -s prefix </b>'
-msg += '\n\n 💠 <b>Leech Filename Suffix </b>'
-msg += f'\n<b> /us{CMD_SUFFIX} -s suffix </b>'
-msg += '\n\n 💠 <b>Leech Filename Remname </b>'
-msg += f'\n<b> /us{CMD_SUFFIX} -s remname </b>'
-msg += '\n\n 💠 <b>Leech Filename Caption </b>'
-msg += f'\n<b> /us{CMD_SUFFIX} -s caption </b>'
-msg += '\n\n💠 <b>Leech User Dump </b>'
-msg += f'\n<b> /us{CMD_SUFFIX} -s dump </b>')
+        await editMessage(msg, '''🌐 <b><u>Available Flags :</u></b>
+>> Reply to the Value with appropriate arg respectively to set directly without opening UserSet.
+💠 <b>Custom Thumbnail :</b>
+    /cmd -s thumb
+💠 <b>Leech Filename Prefix :</b>
+    /cmd -s prefix
+💠 <b>Leech Filename Suffix :</b>
+    /cmd -s suffix
+💠 <b>Leech Filename Remname :</b>
+    /cmd -s remname
+💠 <b>Leech Filename Caption :</b>
+    /cmd -s caption
+💠 <b>Leech User Dump :</b>
+    /cmd -s dump''')
     else:
         msg, button = await get_user_settings(message.from_user)
         await sendMessage(message, msg, button, 'IMAGES')
-
 bot.add_handler(MessageHandler(send_users_settings, filters=command(
     BotCommands.UsersCommand) & CustomFilters.sudo))
 bot.add_handler(MessageHandler(user_settings, filters=command(

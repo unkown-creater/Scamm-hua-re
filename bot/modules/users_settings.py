@@ -615,7 +615,7 @@ async def user_settings(client, message):
         if set_arg and (reply_to := message.reply_to_message):
             if message.from_user.id != reply_to.from_user.id:
                 return await editMessage(msg, '<i>Reply to Your Own Message for Setting via Args Directly</i>')
-            if set_arg in ['lprefix', 'lsuffix', 'lremname', 'lcaption', 'ldump'] and reply_to.text:
+            if set_arg in ['prefix', 'suffix', 'remname', 'caption', 'dump'] and reply_to.text:
                 return await set_custom(client, reply_to, msg, set_arg, True)
             elif set_arg == 'thumb' and reply_to.media:
                 return await set_thumb(client, reply_to, msg, set_arg, True)
@@ -625,15 +625,15 @@ async def user_settings(client, message):
 ➲ <b>Custom Thumbnail :</b>
     /cmd -s thumb
 ➲ <b>Leech Filename Prefix :</b>
-    /cmd -s lprefix
+    /cmd -s prefix
 ➲ <b>Leech Filename Suffix :</b>
-    /cmd -s lsuffix
+    /cmd -s suffix
 ➲ <b>Leech Filename Remname :</b>
-    /cmd -s lremname
+    /cmd -s remname
 ➲ <b>Leech Filename Caption :</b>
-    /cmd -s lcaption
+    /cmd -s caption
 ➲ <b>Leech User Dump :</b>
-    /cmd -s ldump''')
+    /cmd -s dump''')
     else:
         msg, button = await get_user_settings(message.from_user)
         await sendMessage(message, msg, button, 'IMAGES')

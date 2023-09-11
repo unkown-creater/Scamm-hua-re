@@ -633,7 +633,7 @@ msg += f'\n<b> /us{CMD_SUFFIX} -s remname </b>'
 msg += '\n\n 💠 <b>Leech Filename Caption </b>'
 msg += f'\n<b> /us{CMD_SUFFIX} -s caption </b>'
 msg += '\n\n💠 <b>Leech User Dump </b>'
-msg += f'\n<b> /us{CMD_SUFFIX} -s dump </b>'
+msg += f'\n<b> /us{CMD_SUFFIX} -s dump </b>')
     else:
         msg, button = await get_user_settings(message.from_user)
         await sendMessage(message, msg, button, 'IMAGES')

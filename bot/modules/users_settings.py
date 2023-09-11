@@ -607,6 +607,38 @@ async def send_users_settings(client, message):
         await sendMessage(message, f'{userid} have not saved anything..')
 
 
+
+async def user_settings(client, message):
+    if len(message.command) > 1 and message.command[1] == '-s':
+        set_arg = message.command[2].strip() if len(message.command) > 2 else None
+        msg = await sendMessage(message, '<i>Fetching Settings...</i>', photo='IMAGES')
+        if set_arg and (reply_to := message.reply_to_message):
+            if message.from_user.id != reply_to.from_user.id:
+                return await editMessage(msg, '<i>Reply to Your Own Message for Setting via Args Directly</i>')
+            if set_arg in ['lprefix', 'lsuffix', 'lremname', 'lcaption', 'ldump'] and reply_to.text:
+                return await set_custom(client, reply_to, msg, set_arg, True)
+            elif set_arg == 'thumb' and reply_to.media:
+                return await set_thumb(client, reply_to, msg, set_arg, True)
+        await editMessage(msg, '''㊂ <b><u>Available Flags :</u></b>
+>> Reply to the Value with appropriate arg respectively to set directly without opening USet.
+
+➲ <b>Custom Thumbnail :</b>
+    /cmd -s thumb
+➲ <b>Leech Filename Prefix :</b>
+    /cmd -s lprefix
+➲ <b>Leech Filename Suffix :</b>
+    /cmd -s lsuffix
+➲ <b>Leech Filename Remname :</b>
+    /cmd -s lremname
+➲ <b>Leech Filename Caption :</b>
+    /cmd -s lcaption
+➲ <b>Leech User Dump :</b>
+    /cmd -s ldump''')
+    else:
+        msg, button = await get_user_settings(message.from_user)
+        await sendMessage(message, msg, button, 'IMAGES')
+
+
 bot.add_handler(MessageHandler(send_users_settings, filters=command(
     BotCommands.UsersCommand) & CustomFilters.sudo))
 bot.add_handler(MessageHandler(user_settings, filters=command(

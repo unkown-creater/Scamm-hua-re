@@ -468,7 +468,7 @@ class MirrorLeechListener:
                     await sendMessage(self.botpmmsg, msg + lmsg + fmsg)
                 await deleteMessage(self.botpmmsg)
                 if self.isSuperGroup:
-                    btn.ibutton('View in inbox', f"aen {user_id} botpm", 'header')
+                    btn.ibutton('View in inbox', f"aeon {user_id} botpm", 'header')
                     btn = extra_btns(btn)
                     await sendMessage(self.message, msg + '<b>Files has been sent to your inbox</b>', btn.build_menu(1))
                 else:

@@ -638,7 +638,6 @@ async def user_settings(client, message):
         msg, button = await get_user_settings(message.from_user)
         await sendMessage(message, msg, button, 'IMAGES')
 
-
 bot.add_handler(MessageHandler(send_users_settings, filters=command(
     BotCommands.UsersCommand) & CustomFilters.sudo))
 bot.add_handler(MessageHandler(user_settings, filters=command(

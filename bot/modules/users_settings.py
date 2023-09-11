@@ -639,14 +639,6 @@ async def user_settings(client, message):
         await sendMessage(message, msg, button, 'IMAGES')
 
 
-@new_thread
-async def user_settings(client, message):
-    msg, button = await get_user_settings(message.from_user)
-    x = await sendMessage(message, msg, button, photo='IMAGES')
-    await five_minute_del(message)
-    await deleteMessage(x)
-    
-    
 bot.add_handler(MessageHandler(send_users_settings, filters=command(
     BotCommands.UsersCommand) & CustomFilters.sudo))
 bot.add_handler(MessageHandler(user_settings, filters=command(

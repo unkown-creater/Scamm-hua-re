@@ -583,20 +583,7 @@ async def user_settings(client, message):
                 return await set_custom(client, reply_to, msg, set_arg, True)
             elif set_arg == 'thumb' and reply_to.media:
                 return await set_thumb(client, reply_to, msg, set_arg, True)
-        await editMessage(msg, '''🌐 <b><u>Available shortcuts :</u></b>
->> Reply to the Value with appropriate arg respectively to set directly without opening UserSet.
-💠 <b>Custom Thumbnail :</b>
-    /cmd -s thumb
-💠 <b>Leech Filename Prefix :</b>
-    /cmd -s prefix
-💠 <b>Leech Filename Suffix :</b>
-    /cmd -s suffix
-💠 <b>Leech Filename Remname :</b>
-    /cmd -s remname
-💠 <b>Leech Filename Caption :</b>
-    /cmd -s caption
-💠 <b>Leech User Dump :</b>
-    /cmd -s dump''')
+        await editMessage(msg, '''🌐 <b><u>Available shortcuts ''')
     else:
         msg, button = await get_user_settings(message.from_user)
         await sendMessage(message, msg, button, 'IMAGES')

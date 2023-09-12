@@ -585,7 +585,7 @@ async def user_settings(client, message):
                 return await set_custom(client, reply_to, msg, set_arg, True)
             elif set_arg == 'thumb' and reply_to.media:
                 return await set_thumb(client, reply_to, msg, set_arg, True)
-        await editMessage(msg, f'🌐 <b><u>Available shortcuts:</u></b> \n <b>• Reply to the Value with appropriate arg respectively to set directly without opening UserSet.</b>\n\n<b>💠 Custom Thumbnail :</b>\n   <b>/us{CMD_SUFFIX} -s thumb</b> \n<b>💠 Leech Filename Prefix :</b> \n    <b>/us{CMD_SUFFIX} -s prefix </b> \n<b>💠 Leech Filename Suffix :</b> \n    <b>/us{CMD_SUFFIX} -s suffix </b> \n<b>💠 Leech Filename Remname :</b> \n</b>\n   <b>/us{CMD_SUFFIX} -s remname </b> \n<b>💠 Leech Filename Caption :</b>\n   <b>/us{CMD_SUFFIX} -s caption </b> \n<b>💠 Leech User Dump :</b>\n   <b>/us{CMD_SUFFIX} -s dump </b>')
+        await editMessage(msg, f'🌐 <b><u>Available shortcuts:</u></b> \n <b>• Reply to the Value with appropriate arg respectively to set directly without opening UserSet.</b>\n\n<b>💠 Custom Thumbnail :</b>\n   <b>/us{CMD_SUFFIX} -s thumb</b> \n<b>💠 Leech Filename Prefix :</b> \n    <b>/us{CMD_SUFFIX} -s prefix </b> \n<b>💠 Leech Filename Suffix :</b> \n    <b>/us{CMD_SUFFIX} -s suffix </b> \n<b>💠 Leech Filename Remname :</b>\n   <b>/us{CMD_SUFFIX} -s remname </b> \n<b>💠 Leech Filename Caption :</b>\n   <b>/us{CMD_SUFFIX} -s caption </b> \n<b>💠 Leech User Dump :</b>\n   <b>/us{CMD_SUFFIX} -s dump </b>')
     else:
         msg, button = await get_user_settings(message.from_user)
         await sendMessage(message, msg, button, 'IMAGES')

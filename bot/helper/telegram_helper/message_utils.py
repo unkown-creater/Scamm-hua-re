@@ -127,31 +127,32 @@ async def sendMultiMessage(chat_ids, text, buttons=None, photo=None):
 
 
 async def editMessage(message, text, buttons=None, photo=None):
+    try:
+        if message.media:
             try:
-                if message.media:
-                    try:
-                        if photo:
-                          try:
-                              if photo == 'IMAGES':
-                  photo = rchoice(config_dict['IMAGES']) if config_dict['IMAGES'] else 'https://telegra.ph/file/73a4e4e4fd8cf58536473.jpg'                              return await message.edit_media(InputMediaPhoto(photo, text), reply_markup=buttons)
-                              return await message.edit_caption(caption=text, reply_markup=buttons)
-                              
-                          except IndexError:
-                              pass
-                        await message.edit(text=text, disable_web_page_preview=True, reply_markup=buttons)
-                
-                    except IndexError:
-                              pass          
-                return await message.edit(text=text, disable_web_page_preview=True, reply_markup=buttons)        
-            except FloodWait as f:
-                LOGGER.warning(str(f))
-                await sleep(f.value * 1.2)
-                return await editMessage(message, text, buttons, photo)
-            except (MessageNotModified, MessageEmpty):
-                pass
-            except Exception as e:
-                LOGGER.error(str(e))
-                return str(e)
+                if photo:
+                  try:
+                      if photo == 'IMAGES':
+                          photo = rchoice(config_dict['IMAGES'])
+                      return await message.edit_media(InputMediaPhoto(photo, text), reply_markup=buttons)
+                      return await message.edit_caption(caption=text, reply_markup=buttons)
+                      
+                  except IndexError:
+                      pass
+                await message.edit(text=text, disable_web_page_preview=True, reply_markup=buttons)
+        
+            except IndexError:
+                      pass          
+        return await message.edit(text=text, disable_web_page_preview=True, reply_markup=buttons)        
+    except FloodWait as f:
+        LOGGER.warning(str(f))
+        await sleep(f.value * 1.2)
+        return await editMessage(message, text, buttons, photo)
+    except (MessageNotModified, MessageEmpty):
+        pass
+    except Exception as e:
+        LOGGER.error(str(e))
+        return str(e)
 
 
 async def sendFile(message, file, caption=None, buttons=None):

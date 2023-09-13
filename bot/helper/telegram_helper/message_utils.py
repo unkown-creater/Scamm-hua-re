@@ -19,7 +19,8 @@ async def sendMessage(message, text, buttons=None, photo=None):
     try:
         if photo:
             try:
-                if photo == 'https://graph.org/file/e9d1f661f58c7d6aa4370.jpg':
+                if photo == 'IMAGES':
+                    photo = rchoice(config_dict['IMAGES'])
                 return await message.reply_photo(photo=photo, reply_to_message_id=message.id, caption=text, reply_markup=buttons, disable_notification=True)
             except IndexError:
                 pass
@@ -46,7 +47,8 @@ async def sendCustomMsg(chat_id, text, buttons=None, photo=None):
     try:
         if photo:
             try:
-                if photo == 'https://graph.org/file/e9d1f661f58c7d6aa4370.jpg':
+                if photo == 'IMAGES':
+                    photo = rchoice(config_dict['IMAGES'])
                 return await bot.send_photo(chat_id=chat_id, photo=photo, caption=text, reply_markup=buttons, disable_notification=True)
             except IndexError:
                 pass
@@ -98,7 +100,8 @@ async def sendMultiMessage(chat_ids, text, buttons=None, photo=None):
         try:
             if photo:
                 try:
-                    if photo == 'https://graph.org/file/e9d1f661f58c7d6aa4370.jpg':
+                    if photo == 'IMAGES':
+                        photo = rchoice(config_dict['IMAGES'])
                     sent = await bot.send_photo(chat_id=chat.id, photo=photo, caption=text, reply_markup=buttons, disable_notification=True)
                     msg_dict[chat.id] = sent
                     continue
@@ -129,8 +132,8 @@ async def editMessage(message, text, buttons=None, photo=None):
                     try:
                         if photo:
                           try:
-                              if photo == 'https://graph.org/file/e9d1f661f58c7d6aa4370.jpg':
-                              return await message.edit_media(InputMediaPhoto(photo, text), reply_markup=buttons)
+                              if photo == 'IMAGES':
+                  photo = rchoice(config_dict['IMAGES']) if config_dict['IMAGES'] else 'https://telegra.ph/file/73a4e4e4fd8cf58536473.jpg'                              return await message.edit_media(InputMediaPhoto(photo, text), reply_markup=buttons)
                               return await message.edit_caption(caption=text, reply_markup=buttons)
                               
                           except IndexError:

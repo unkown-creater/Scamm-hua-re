@@ -30,8 +30,6 @@ from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.button_build import ButtonMaker
 from bot.helper.ext_utils.telegraph_helper import telegraph
 from bot.helper.ext_utils.shortners import short_url
-from psutil import disk_usage, cpu_percent, swap_memory, cpu_count, cpu_freq, virtual_memory, net_io_counters, boot_time
-
 
 THREADPOOL = ThreadPoolExecutor(max_workers = 1000)
 MAGNET_REGEX = r'magnet:\?xt=urn:(btih|btmh):[a-zA-Z0-9]*\s*'
@@ -191,7 +189,6 @@ def get_readable_message():
             msg += f"\n🔰Size: {download.size()}"
         msg += f"\n🔰Elapsed: {get_readable_time(time() - download.message.date.timestamp())}"
         msg += f"\n🔰Mode: {download.upload_details['mode']}"
-        msg += f"\n🔰Disk usage :</code> {disk_usage}%"
         msg += f"\n❌ cancel: /{BotCommands.CancelMirror}_{download.gid()[:8]}\n\n"
     if len(msg) == 0:
         return None, None

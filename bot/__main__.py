@@ -57,6 +57,7 @@ async def stats(_, message):
         f'<code>❅ Sys uptime :</code> {osUptime}\n'\
         f'<code>❅ CPU usage  :</code> {cpuUsage}%\n'\
         f'<code>❅ RAM usage  :</code> {memory.percent}%\n'\
+        f'<code>• Disk usage :</code> {disk}%\n'\
             
     limitations = f'<b>LIMITATIONS</b>\n\n'
     

@@ -170,7 +170,7 @@ def get_readable_message():
         msg += f"<b>⚡{download.status()}...</b>"
         if download.status() not in [MirrorStatus.STATUS_SPLITTING, MirrorStatus.STATUS_SEEDING]:
             msg += f"\n⚙️[<a href='https://t.me/PowerLeech'>{get_progress_bar_string(download.progress())} {download.progress()}</a>]"
-            msg += f"\n\n🔰 Progress: {download.processed_bytes()} of {download.size()}"
+            msg += f"\n\n🔰Progress: {download.processed_bytes()} of {download.size()}"
             msg += f"\n🔰User: {source(download)}"
             msg += f"\n🔰Speed: {download.speed()}"
             msg += f'\n🔰Estimated: {download.eta()}'

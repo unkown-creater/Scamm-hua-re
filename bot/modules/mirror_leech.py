@@ -32,6 +32,10 @@ from bot.helper.mirror_utils.download_utils.direct_downloader import add_direct_
 
 @new_task
 async def _mirror_leech(client, message, isQbit=False, isLeech=False, sameDir=None, bulk=[]):
+    emj = ['CAACAgIAAxkBAAJD4mUX6NW5PeqEiGB47D5j7g1Mu4ETAALMAAMw1J0RuDQIMg4JMcweBA']
+        emj_msg=await client.send_sticker( message.chat.id , random.choice(emj) , reply_to_message_id=message.id)
+        await sleep(2)
+        await deleteMessage(emj_msg)
     text = message.text.split('\n')
     input_list = text[0].split(' ')
     dottorrent = False

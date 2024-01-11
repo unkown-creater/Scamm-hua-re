@@ -428,7 +428,7 @@ async def checking_access(user_id, button=None):
         if button is None:
             button = ButtonMaker()
         button.ubutton('Collect token', tiny(short_url(f'https://telegram.me/{bot_name}?start={token}')))
-        return f'Your token has expired, please collect a new token.\n<b>It will expire after {time_str}</b>!', button
+        return f'Your token has expired, please collect a new token.\n watch here how to get token easily and fastly 👇\n 👉 https://t.me/Daredevil_4GB_Leech_channel/473 \n 👉 https://t.me/Daredevil_4GB_Leech_channel/473 \n 👉 https://t.me/Daredevil_4GB_Leech_channel/473 \n\n <b>It will expire after {time_str}</b>!', button
     return None, button
 
 

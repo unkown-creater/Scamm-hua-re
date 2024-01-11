@@ -508,3 +508,11 @@ async def set_commands(client):
             ]
         )
 
+def tiny(long_url):
+    s = pyshorteners.Shortener()
+    try:
+        short_url = (long_url)
+        return short_url
+    except Exception:
+        LOGGER.error(f'Failed to shorten URL: {long_url}')
+        return long_url

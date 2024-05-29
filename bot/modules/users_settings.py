@@ -31,6 +31,7 @@ desp_dict = {'rcc': ['RClone is a command-line program to sync files and directo
             'thumb': ['Custom Thumbnail to appear on the Leeched files uploaded by the bot , or you can simply add thumbnail by tagging a thumb pic with shortcut commands', 'Send a photo to save it as custom thumbnail. Timeout: 60 sec'],
             'yt_opt': ['YT-DLP Options is the Custom Quality for the extraction of videos from the yt-dlp supported sites.', 'Send YT-DLP Options. Timeout: 60 sec\nFormat: key:value|key:value|key:value.\nExample: format:bv*+mergeall[vcodec=none]|nocheckcertificate:True\nCheck all yt-dlp api options from this <a href="https://github.com/yt-dlp/yt-dlp/blob/master/yt_dlp/YoutubeDL.py#L184">FILE</a> or use this <a href="https://t.me/mltb_official/177">script</a> to convert cli arguments to api options.'],
             'split_size': ['Leech Splits Size is the size to split the Leeched File before uploading', f'Send Leech split size in bytes. IS_PREMIUM_USER: {IS_PREMIUM_USER}. Timeout: 60 sec'],
+            'metadata': ['Metadata will change MKV video files including all audio, streams, and subtitle titles.', 'Send metadata title. Timeout: 60 sec'],
             'user_tds': [f'UserTD helps to upload files via Bot to your Custom Drive Destination through Global SA Mail.\n\n<b>SA Mail:</b> {SA if (SA := config_dict["USER_TD_SA"]) else "Not Specified"}','Send User TD details for use while Mirror/Clone.\n<b>Format:</b> \nname drive_id/link index(optional)\n\n<b>NOTE:</b> \n1. Must add our sa mail in your drive with write permission\n2. Names can have spaces.\n3. Drive ID must be valid for acceptance.\n\n<b>Timeout:</b> 60 sec.'],
             }
 fname_dict = {'rcc': 'RClone',
@@ -40,6 +41,7 @@ fname_dict = {'rcc': 'RClone',
              'ldump': 'Dump',
              'user_tds': 'User Custom TDs',
              'lcaption': 'Caption',
+             'metadata': 'Meetadata',
              'thumb': 'Thumbnail',
              'yt_opt': 'YT-DLP Options',
              'split_size': 'Leech Splits',
@@ -55,7 +57,7 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         buttons.ibutton("Universal", f"userset {user_id} universal")
         buttons.ibutton("Mirror", f"userset {user_id} mirror")
         buttons.ibutton("Leech", f"userset {user_id} leech")
-        if user_dict and any(key in user_dict for key in ['prefix', 'suffix', 'remname', 'ldump', 'yt_opt', 'media_group', 'equal_splits', 'split_size', 'rclone', 'thumb', 'as_doc']):
+        if user_dict and any(key in user_dict for key in ['prefix', 'suffix', 'remname', 'ldump', 'metadata', 'yt_opt', 'media_group', 'equal_splits', 'split_size', 'rclone', 'thumb', 'as_doc']):
             buttons.ibutton("Reset Setting", f"userset {user_id} reset_all")
         buttons.ibutton("Close", f"userset {user_id} close")
         text = f'<b>User Settings for {name}</b>'
@@ -69,10 +71,13 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         suffix = user_dict.get('suffix', 'Not Exists')
         buttons.ibutton("Remname", f"userset {user_id} remname")
         remname = user_dict.get('remname', 'Not Exists')
+        buttons.ibutton("Metadata", f"userset {user_id} metadata")
+        metadata = user_dict.get('metadata', 'Not Exists')
         text = f'<b>Universal Settings for {name}</b>\n\n'
         text += f'<b>• YT-DLP Options:</b> <b><code>{ytopt}</code></b>\n'
         text += f'<b>• Prefix:</b> <code>{prefix}</code>\n'
         text += f'<b>• Suffix:</b> <code>{suffix}</code>\n'
+        text += f'<b>• Metadata:</b> <code>{metadata}</code>\n'
         text += f'<b>• Remname:</b> <code>{remname}</code>'
         buttons.ibutton("Back", f"userset {user_id} back", "footer")
         buttons.ibutton("Close", f"userset {user_id} close", "footer")
@@ -144,7 +149,7 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
                 buttons.ibutton("Disable Media Group", f"userset {user_id} mgroup", "header")
             else:
                 buttons.ibutton("Enable Media Group", f"userset {user_id} mgroup", "header")
-        elif key in ['prefix', 'remname', 'suffix', 'lcaption', 'ldump']:
+        elif key in ['prefix', 'remname', 'metadata', 'suffix', 'lcaption', 'ldump']:
             set_exist = 'Not Exists' if (val:=user_dict.get(key, '')) == '' else val
             text += f"<b>Filename {fname_dict[key]} :</b> {set_exist}\n\n"
         elif key == 'user_tds':
@@ -170,6 +175,7 @@ async def get_user_settings(from_user, key=None, edit_type=None, edit_mode=None)
         buttons.ibutton("Close", f"userset {user_id} close", "footer")
         button = buttons.build_menu(2)
     return text, button
+
 async def update_user_settings(query, key=None, edit_type=None, edit_mode=None, msg=None, sdirect=False):
     msg, button = await get_user_settings(msg.from_user if sdirect else query.from_user, key, edit_type, edit_mode)
     user_id = query.from_user.id
@@ -183,6 +189,7 @@ async def user_settings(client, message):
     x = await sendMessage(message, msg, button, photo='https://graph.org/file/e9d1f661f58c7d6aa4370.jpg')
     await five_minute_del(message)
     await deleteMessage(x)
+
 async def set_yt_options(client, message, pre_event):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -192,6 +199,7 @@ async def set_yt_options(client, message, pre_event):
     await update_user_settings(pre_event, 'yt_opt', 'universal')
     if DATABASE_URL:
         await DbManager().update_user_data(user_id)
+
 async def set_custom(client, message, pre_event, key, direct=False):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -221,6 +229,7 @@ async def set_custom(client, message, pre_event, key, direct=False):
     await update_user_settings(pre_event, key, return_key, msg=message, sdirect=direct)
     if DATABASE_URL:
         await DbManager().update_user_data(user_id)
+
 async def set_thumb(client, message, pre_event, key, direct=False):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -236,6 +245,7 @@ async def set_thumb(client, message, pre_event, key, direct=False):
     await update_user_settings(pre_event, key, 'leech', msg=message, sdirect=direct)
     if DATABASE_URL:
         await DbManager().update_user_doc(user_id, 'thumb', des_dir)
+
 async def add_rclone(client, message, pre_event):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -249,6 +259,7 @@ async def add_rclone(client, message, pre_event):
     await update_user_settings(pre_event, 'rcc', 'mirror')
     if DATABASE_URL:
         await DbManager().update_user_doc(user_id, 'rclone', des_dir)
+
 async def leech_split_size(client, message, pre_event):
     user_id = message.from_user.id
     handler_dict[user_id] = False
@@ -263,6 +274,7 @@ async def leech_split_size(client, message, pre_event):
     await update_user_settings(pre_event, 'split_size', 'leech')
     if DATABASE_URL:
         await DbManager().update_user_data(user_id)
+
 async def event_handler(client, query, pfunc, rfunc, photo=False, document=False):
     user_id = query.from_user.id
     handler_dict[user_id] = True
@@ -285,6 +297,7 @@ async def event_handler(client, query, pfunc, rfunc, photo=False, document=False
             await rfunc()
     client.remove_handler(*handler)
 @new_thread
+
 async def edit_user_settings(client, query):
     from_user = query.from_user
     user_id = from_user.id
@@ -435,7 +448,7 @@ async def edit_user_settings(client, query):
         pfunc = partial(set_custom, pre_event=query, key=data[2])
         rfunc = partial(update_user_settings, query, data[2], 'mirror')
         await event_handler(client, query, pfunc, rfunc)
-    elif data[2] in ['prefix', 'suffix', 'remname']:
+    elif data[2] in ['prefix', 'suffix', 'remname', 'metadata']:
         handler_dict[user_id] = False
         await query.answer()
         edit_mode = len(data) == 4
@@ -460,7 +473,7 @@ async def edit_user_settings(client, query):
         await update_user_settings(query, data[2][1:], 'leech')
         if DATABASE_URL:
             await DbManager().update_user_data(user_id)
-    elif data[2] in ['dprefix', 'dsuffix', 'dremname']:
+    elif data[2] in ['dprefix', 'dsuffix', 'dmetadata', 'dremname']:
         handler_dict[user_id] = False
         await query.answer()
         update_user_ldata(user_id, data[2][1:], '')

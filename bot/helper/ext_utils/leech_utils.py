@@ -211,11 +211,17 @@ async def format_filename(file_, user_id, dirpath=None, isMirror=False):
     remname = user_dict.get('remname', '')
     suffix = user_dict.get('suffix', '')
     lcaption = user_dict.get('lcaption', '')
+    metadata = user_dict.get('metadata', '')
  
     prefile_ = file_
     if file_.startswith('www'): #Remove all www.xyz.xyz domains
         file_ = ' '.join(file_.split()[1:])
         
+    if metadata and dirpath and file_.lower().endswith('.mkv'):
+        file_ = await delete_attachments(file_, dirpath)
+        file_ = await change_metadata(file_, dirpath, metadata)
+        file_ = await delete_extra_video_streams(file_, dirpath)
+    
     if remname:
         if not remname.startswith('|'):
             remname = f"|{remname}"

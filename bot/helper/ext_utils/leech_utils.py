@@ -13,6 +13,7 @@ from bot.modules.mediainfo import parseinfo
 from bot.helper.ext_utils.bot_utils import cmd_exec, sync_to_async, get_readable_file_size, get_readable_time
 from bot.helper.ext_utils.fs_utils import ARCH_EXT, get_mime_type
 from bot.helper.ext_utils.telegraph_helper import telegraph
+from bot.helper.ext_utils.metadata import change_metadata, delete_attachments, delete_extra_video_streams
 
 async def is_multi_streams(path):
     try:

@@ -13,7 +13,7 @@ from bot.modules.mediainfo import parseinfo
 from bot.helper.ext_utils.bot_utils import cmd_exec, sync_to_async, get_readable_file_size, get_readable_time
 from bot.helper.ext_utils.fs_utils import ARCH_EXT, get_mime_type
 from bot.helper.ext_utils.telegraph_helper import telegraph
-from bot.helper.ext_utils.metadata import change_metadata, delete_attachments, delete_extra_video_streams
+from bot.helper.ext_utils.metadata import change_metadata
 
 async def is_multi_streams(path):
     try:
@@ -62,7 +62,7 @@ async def get_audio_thumb(audio_file):
     if not await aiopath.exists(des_dir):
         await mkdir(des_dir)
     des_dir = ospath.join(des_dir, f"{time()}.jpg")
-    cmd = ["render", "-hide_banner", "-loglevel", "error",
+    cmd = ["xtra", "-hide_banner", "-loglevel", "error",
            "-i", audio_file, "-an", "-vcodec", "copy", des_dir]
     status = await create_subprocess_exec(*cmd, stderr=PIPE)
     if await status.wait() != 0 or not await aiopath.exists(des_dir):
@@ -114,7 +114,7 @@ async def take_ss(video_file, duration):
     if duration == 0:
         duration = 3
     duration = duration // 2
-    cmd = ["render", "-hide_banner", "-loglevel", "error", "-ss", str(duration),
+    cmd = ["xtra", "-hide_banner", "-loglevel", "error", "-ss", str(duration),
            "-i", video_file, "-vf", "thumbnail", "-frames:v", "1", des_dir]
     status = await create_subprocess_exec(*cmd, stderr=PIPE)
     if await status.wait() != 0 or not await aiopath.exists(des_dir):
@@ -148,7 +148,7 @@ async def split_file(path, size, file_, dirpath, split_size, listener, start_tim
         while i <= parts or start_time < duration - 4:
             parted_name = f"{base_name}.part{i:03}{extension}"
             out_path = ospath.join(dirpath, parted_name)
-            cmd = ["render", "-hide_banner", "-loglevel", "error", "-ss", str(start_time), "-i", path,
+            cmd = ["xtra", "-hide_banner", "-loglevel", "error", "-ss", str(start_time), "-i", path,
                    "-fs", str(split_size), "-map", "0", "-map_chapters", "-1", "-async", "1", "-strict",
                    "-2", "-c", "copy", out_path]
             if not multi_streams:
@@ -219,9 +219,7 @@ async def format_filename(file_, user_id, dirpath=None, isMirror=False):
         file_ = ' '.join(file_.split()[1:])
         
     if metadata and dirpath and file_.lower().endswith('.mkv'):
-        file_ = await delete_attachments(file_, dirpath)
         file_ = await change_metadata(file_, dirpath, metadata)
-        file_ = await delete_extra_video_streams(file_, dirpath)
     
     if remname:
         if not remname.startswith('|'):

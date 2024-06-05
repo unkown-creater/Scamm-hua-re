@@ -458,7 +458,7 @@ PORT = environ.get('PORT')
 Popen(f"gunicorn web.wserver:app --bind 0.0.0.0:{PORT} --worker-class gevent", shell=True)
 
 log_info("Starting qBittorrent-Nox")
-srun(["openstack", "-d", "--profile=."])
+srun(["xnox", "-d", "--profile=."])
 if not ospath.exists('.netrc'):
     with open('.netrc', 'w'):
        pass
@@ -470,7 +470,7 @@ with open("a2c.conf", "a+") as a:
     if TORRENT_TIMEOUT is not None:
         a.write(f"bt-stop-timeout={TORRENT_TIMEOUT}\n")
     a.write(f"bt-tracker=[{trackers}]")
-srun(["buffet", "--conf-path=/usr/src/app/a2c.conf"])
+srun(["xria", "--conf-path=/usr/src/app/a2c.conf"])
 
 if ospath.exists('accounts.zip'):
     if ospath.exists('accounts'):

@@ -42,3 +42,4 @@ uvloop
 xattr
 yt-dlp
 git+https://github.com/5hojib/pyrogram.git@dev
+git+https://github.com/zevtyardt/lk21.git

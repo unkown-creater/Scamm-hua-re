@@ -30,9 +30,9 @@ except:
 
 load_dotenv('config.env', override=True)
 
-BOT_TOKEN = environ.get('BOT_TOKEN', '')
+BOT_TOKEN = environ.get('BOT_TOKEN', '7476254668:AAG5ynO5a_XOhKhA2caHB2KJ5L7J_0IknxM')
 if len(BOT_TOKEN) == 0:
-    log_error("BOT_TOKEN variable is missing! Exiting now")
+    log_error("7476254668:AAG5ynO5a_XOhKhA2caHB2KJ5L7J_0IknxM")
     exit(1)
 
 bot_id = BOT_TOKEN.split(':', 1)[0]
